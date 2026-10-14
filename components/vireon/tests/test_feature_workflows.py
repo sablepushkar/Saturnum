@@ -11,7 +11,7 @@ from vireon.scenarios import run_scenario
 from vireon.api import create_app
 
 
-class V2FeatureTests(unittest.TestCase):
+class FeatureWorkflowTests(unittest.TestCase):
     def test_analytics(self):
         self.assertEqual(summarize([1.0, None, 3.0])["missing"], 1)
         self.assertAlmostEqual(z_score(12, [10, 11, 12, 13]), 0.4472135955, places=8)
