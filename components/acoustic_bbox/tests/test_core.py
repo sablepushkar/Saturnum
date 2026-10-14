@@ -12,7 +12,7 @@ class CoreTests(unittest.TestCase):
         payload = app.payload_for(event)
         self.assertEqual(payload["message_id"], event.event_id)
         self.assertEqual(payload["priority"], "P2")
-        self.assertEqual(payload["bbox_version"], "A.B.B Q3")
+        self.assertEqual(payload["bbox_version"], app.PROJECT_VERSION)
         self.assertEqual(
             json.loads(app.payload_bytes(event).decode())["event_type"],
             "SUPPLY_REQUIRED",

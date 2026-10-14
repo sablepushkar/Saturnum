@@ -25,7 +25,7 @@ DEFAULT_WAV = Path("acoustic_event.wav")
 SAMPLE_RATE = 48_000
 GGWAVE_PROTOCOL = 1
 GGWAVE_VOLUME = 20
-PROJECT_VERSION = "A.B.B Q3"
+PROJECT_VERSION = "1"
 
 CATEGORIES = {
     "MEDICAL": "Clinical event",
