@@ -30,7 +30,7 @@ python -m venv .venv
 # Linux/macOS: source .venv/bin/activate
 # Windows PowerShell: .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install -e ./components/vireon "httpx>=0.27,<1"
+python -m pip install -e './components/vireon[test]'
 ```
 
 ## Run
