@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VIREON — Portfolio Dashboard</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:0;background:#0b1020;color:#eaf0ff}
+main{max-width:1100px;margin:auto;padding:32px}
+.card{background:#121a2f;border:1px solid #263556;border-radius:14px;padding:18px;margin:14px 0}
+button,select{padding:10px 12px;border-radius:9px;border:1px solid #42577f;background:#18233d;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+pre{white-space:pre-wrap;overflow:auto}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#20345c}
+</style>
+</head>
+<body><main>
+<h1>VIREON</h1><p>Pharmaceutical Lifecycle Intelligence Engine — synthetic portfolio demonstration.</p>
+<div class="grid">
+<div class="card"><h3>System</h3><p id="health">Loading…</p></div>
+<div class="card"><h3>Lifecycle</h3><p>Discovery → Preclinical → Phase I → Phase II → Phase III → Regulatory → Manufacturing → Post-market</p></div>
+<div class="card"><h3>Traceability</h3><p>Event → Signal → Evidence → Audit</p></div>
+</div>
+<div class="card"><h2>Scenario Explorer</h2>
+<select id="scenario">
+<option>normal-trial</option><option>biomarker-signal</option><option>missing-data</option>
+<option>site-anomaly</option><option>digital-measure-drift</option><option>model-drift</option>
+</select>
+<button onclick="runScenario()">Run scenario</button>
+<pre id="result"></pre></div>
+<div class="card"><h2>Portfolio boundaries</h2><p>All dashboard data is synthetic. VIREON demonstrates workflow, provenance, monitoring and interoperability patterns; it does not provide clinical, diagnostic, treatment or regulatory decisions.</p></div>
+</main>
+<script>
+async function load(){try{const r=await fetch('/health');const d=await r.json();document.querySelector('#health').textContent=d.status+' · v'+d.version}catch(e){document.querySelector('#health').textContent='API unavailable'}}
+async function runScenario(){const name=document.querySelector('#scenario').value;const r=await fetch('/v1/scenarios/'+encodeURIComponent(name)+'/run',{method:'POST'});document.querySelector('#result').textContent=JSON.stringify(await r.json(),null,2)}
+load();
+</script></body></html>

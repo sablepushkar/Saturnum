@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vireon"
+version = "2.0.0"
+description = "Pharmaceutical lifecycle intelligence engine research prototype."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Pushkar Sable" }]
+dependencies = [
+    "fastapi>=0.115,<1",
+    "uvicorn>=0.30,<1",
+]
+
+[project.optional-dependencies]
+test = [
+    "httpx2>=2.0,<3",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+vireon = "vireon.cli:main"

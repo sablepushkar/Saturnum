@@ -1,0 +1,12 @@
+[
+  {
+    "context_of_use": "synthetic signal monitoring",
+    "created_at": "2026-09-21",
+    "item_id": "threshold-detector",
+    "kind": "detector",
+    "owner": "VIREON",
+    "risk_tier": "low",
+    "status": "active",
+    "version": "0.2"
+  }
+]
