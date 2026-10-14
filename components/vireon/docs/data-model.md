@@ -1,16 +1,11 @@
-# VIREON Data Model
+# VIREON data model
 
-VIREON keeps the portfolio model deliberately small.
+The current model is intentionally small and is used with synthetic examples.
 
-- PharmaEvent: validated timestamped input from a synthetic source.
-- Signal: deterministic finding generated from an event and a detector version.
-- EvidenceLink: provenance edge connecting a signal to its source event.
-- Audit record: append-style record of storage actions.
-- EvidenceManifest: reproducibility snapshot of dataset, detector, inputs, signals and evidence.
-- RegistryItem: versioned metadata for models, datasets, detectors or measures.
+- PharmaEvent: a validated event record with a timestamp and event fields.
+- Signal: a rule-generated result linked to the event that triggered it.
+- Evidence reference: a pointer to the source event, rule or manifest associated with a result.
+- Audit record: a local record of selected changes or actions.
+- Registry entry: metadata about a data, model or detector version.
 
-The intended lineage is:
-
-Event -> Signal -> Evidence -> Manifest -> Review
-
-The model is not a clinical data model and does not claim terminology or regulatory conformance.
+The SQLite database is for local development. These objects do not represent a complete regulated data model, and the records are not a compliance guarantee.

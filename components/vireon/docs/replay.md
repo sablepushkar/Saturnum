@@ -1,15 +1,7 @@
-# Replaying VIREON signal rules
+# Re-running VIREON signals
 
-VIREON uses deterministic threshold rules. A normal `detect_signals(...)` call stamps the generated signals with the current UTC time. For regression comparisons or historical replays, pass an explicit timezone-aware timestamp:
+VIREON uses deterministic threshold rules. A call without an explicit evaluation time uses the current UTC time, so the timestamp can differ between runs.
 
-```python
-from datetime import datetime, timezone
-from vireon.signal_engine import detect_signals
+For a repeatable test, pass the same synthetic events, thresholds, detector version and timezone-aware evaluated_at value. The resulting signal objects can then be compared between runs.
 
-replay_time = datetime(2026, 10, 10, 12, 0, tzinfo=timezone.utc)
-first = detect_signals(events, biomarker_x_threshold=130, evaluated_at=replay_time)
-second = detect_signals(events, biomarker_x_threshold=130, evaluated_at=replay_time)
-assert first == second
-```
-
-A replay is comparable only when the event inputs, thresholds, detector version, and evaluation timestamp are the same. Use synthetic fixtures in tests. This mechanism supports software reproducibility; it does not establish clinical validity or regulatory compliance.
+This checks whether the software behaves consistently for the supplied inputs. It does not show that the rule thresholds are scientifically or clinically correct.

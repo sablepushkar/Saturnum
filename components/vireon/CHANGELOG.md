@@ -1,17 +1,23 @@
 # Changelog
 
+I keep this file for the main changes that affect how the project runs. It is not a list of every small edit.
+
 ## V2.0.0
-- added configurable runtime settings and environment example;
-- added reusable analytics and deterministic synthetic scenarios;
-- added model/data/detector registry and reproducible evidence manifests;
-- added portfolio CLI and lightweight dashboard/scenario explorer;
-- added registry, scenario, configuration and evidence-manifest API surfaces;
-- added data-model, interoperability and architecture-decision documentation;
-- expanded regression coverage.
+
+- Added configurable runtime settings and an environment example.
+- Added synthetic scenarios and reusable analysis helpers.
+- Added a registry for data, model and detector versions.
+- Added evidence manifests and CLI commands for the registry.
+- Added API routes for scenarios, configuration and evidence-related information.
+- Added a small dashboard and more regression tests.
+- Added notes on the data model, architecture and interoperability.
 
 ## V1.1.0
-- persisted signals alongside events;
-- added evidence and audit records;
-- strengthened event and trial input validation;
-- added AI-GUARD, digital-measure, lifecycle and interoperability boundaries;
-- cleaned CI runner and action versions.
+
+- Saved signals alongside events.
+- Added evidence references and audit-style records.
+- Improved validation for events and trial-style inputs.
+- Added rule checks for lifecycle and digital-measure examples.
+- Updated the CI workflow.
+
+The project still uses synthetic data and is not a validated pharmaceutical system.

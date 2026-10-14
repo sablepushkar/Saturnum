@@ -1,13 +1,7 @@
-# Interoperability
+# Interoperability notes
 
-VIREON includes intentionally small FHIR and OMOP boundary demonstrations.
+VIREON includes small demonstrations of how selected fields could be mapped to FHIR- or OMOP-style structures. These are examples for learning, not complete standards implementations.
 
-## FHIR
+A field that cannot be mapped should be left explicit rather than guessed. Real interoperability work would need terminology mapping, validation against the relevant specifications, handling of missing values and review by people who know the source system.
 
-GET /v1/interop/fhir/events/{event_id} returns an illustrative FHIR Observation. FHIR R4 defines Observation as a resource for measurements and simple assertions about a patient, device or other subject. VIREON only demonstrates the mapping boundary; it does not implement full terminology, profiles, validation or conformance.
-
-## OMOP
-
-GET /v1/interop/omop/events/{event_id} returns an illustrative measurement mapping. Local synthetic keys are deliberately marked as unmapped rather than pretending they are validated vocabulary concepts.
-
-These endpoints are portfolio demonstrations of where standards-aware adapters would sit in a larger system.
+No real hospital or pharmaceutical platform is connected in this project.

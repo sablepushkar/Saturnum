@@ -1,13 +1,17 @@
-# Architecture Decisions
+# A few design decisions
 
-## ADR-0001 — Synthetic data first
-VIREON uses synthetic data for the portfolio release. This makes scenarios deterministic and avoids presenting the prototype as a clinical system.
+## Use synthetic data first
 
-## ADR-0002 — Deterministic signals before ML
-The first detector is explicit and versioned. This makes behavior inspectable and testable before adding more complex analytical methods.
+I use synthetic events because this is a student project and I do not have a real pharmaceutical dataset or permission to use patient data. This also makes it easier to repeat the same test.
 
-## ADR-0003 — Evidence lineage is a first-class object
-Signals keep links to their source events and detector version. Evidence manifests make the inputs and outputs of a demonstration reproducible.
+## Use rules that can be inspected
 
-## ADR-0004 — Human review remains the boundary
-AI-GUARD and monitoring modules surface review conditions; they do not issue treatment, diagnosis, safety, efficacy or regulatory decisions.
+The current signals come from configured thresholds. I can look at the input and rule to understand why a signal was produced. I have not added machine learning where a straightforward rule is enough for the current example.
+
+## Keep it local for now
+
+SQLite, a CLI and a small API are enough to test the workflow. A distributed setup would add work without helping me answer a current project question.
+
+## Keep limitations visible
+
+A generated flag is not proof of a real-world problem, a clinical conclusion or misconduct. The project needs better fixtures and more testing before any stronger claim would be reasonable.
