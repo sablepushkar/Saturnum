@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Acoustic-B-Box A.B.B Q3: compact event-communication simulator.
+"""Acoustic-B-Box: compact event-communication simulator.
 
 Prototype only. Medical examples are synthetic and operational response values
 are simulation parameters, not clinical guidance.
@@ -244,7 +244,7 @@ def validate_decoded_packet(packet: Any) -> dict[str, Any]:
         raise ValueError("Decoded packet must be a JSON object.")
     message_id = packet.get("message_id")
     if packet.get("bbox_version") != PROJECT_VERSION or not isinstance(message_id, str) or not message_id.strip():
-        raise ValueError(f"Decoded packet is not a valid Acoustic-B-Box {PROJECT_VERSION} event.")
+        raise ValueError(f"Decoded packet is not a valid Acoustic-B-Box event.")
     return packet
 
 
@@ -787,7 +787,7 @@ def run_self_test() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Acoustic-B-Box A.B.B Q3 sample system"
+        description="Acoustic-B-Box sample system"
     )
     parser.add_argument(
         "--simulate",
@@ -875,7 +875,7 @@ def main() -> None:
             return
 
         else:
-            print("Acoustic-B-Box A.B.B Q3")
+            print("Acoustic-B-Box")
             print("1. Run sample hospital event")
             print("2. Run all demo scenarios")
             print("3. View dashboard")

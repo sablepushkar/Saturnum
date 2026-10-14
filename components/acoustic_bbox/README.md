@@ -1,4 +1,4 @@
-# Acoustic-B-Box — A.B.B Q3
+# Acoustic-B-Box
 
 Acoustic-B-Box is my experiment with moving a structured event through a simple delivery workflow. It currently has a software simulator and an optional GGWave-based WAV encode/decode path.
 
