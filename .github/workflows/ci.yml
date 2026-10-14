@@ -29,3 +29,7 @@ jobs:
         run: python saturnum.py check
       - name: Run Acoustic-B-Box self-test
         run: python saturnum.py acoustic --test
+      - name: Smoke-test VIREON CLI through Saturnum
+        run: |
+          python saturnum.py vireon simulate --scenario biomarker-signal
+          python saturnum.py vireon registry list
