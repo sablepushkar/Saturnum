@@ -244,7 +244,7 @@ def validate_decoded_packet(packet: Any) -> dict[str, Any]:
         raise ValueError("Decoded packet must be a JSON object.")
     message_id = packet.get("message_id")
     if packet.get("bbox_version") != PROJECT_VERSION or not isinstance(message_id, str) or not message_id.strip():
-        raise ValueError(f"Decoded packet is not a valid Acoustic-B-Box event.")
+        raise ValueError(f"Decoded packet has an unsupported Acoustic-B-Box payload version.")
     return packet
 
 
