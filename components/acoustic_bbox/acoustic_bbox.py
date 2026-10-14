@@ -239,12 +239,69 @@ def payload_hash(event: Event) -> str:
 
 
 def validate_decoded_packet(packet: Any) -> dict[str, Any]:
-    """Validate the minimum envelope contract for a decoded transport packet."""
+    """Validate the event envelope before a decoded packet is accepted."""
     if not isinstance(packet, dict):
         raise ValueError("Decoded packet must be a JSON object.")
-    message_id = packet.get("message_id")
-    if packet.get("bbox_version") != PROJECT_VERSION or not isinstance(message_id, str) or not message_id.strip():
+    required = {
+        "bbox_version", "message_id", "created_at", "category", "priority",
+        "event_type", "department", "source_device", "description", "response", "data",
+    }
+    missing = sorted(required - set(packet))
+    if missing:
+        raise ValueError("Decoded packet is missing required field(s): " + ", ".join(missing))
+    if packet.get("bbox_version") != PROJECT_VERSION:
         raise ValueError(f"Decoded packet has an unsupported Acoustic-B-Box payload version.")
+    for field_name in ("message_id", "created_at", "event_type", "department", "source_device", "description"):
+        value = packet.get(field_name)
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"Decoded packet field {field_name!r} must be a non-empty string.")
+    if packet["category"] not in CATEGORIES:
+        raise ValueError("Decoded packet has an unknown category.")
+    if packet["priority"] not in PRIORITIES:
+        raise ValueError("Decoded packet has an unknown priority.")
+    if packet["department"] not in DEPARTMENTS:
+        raise ValueError("Decoded packet has an unknown department.")
+    if len(packet["description"]) > 1000:
+        raise ValueError("Decoded packet description cannot exceed 1000 characters.")
+    try:
+        created = datetime.fromisoformat(packet["created_at"].replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError("Decoded packet created_at must be an ISO timestamp.") from exc
+    if created.tzinfo is None or created.utcoffset() is None:
+        raise ValueError("Decoded packet created_at must include a timezone.")
+    response = packet.get("response")
+    if not isinstance(response, dict):
+        raise ValueError("Decoded packet response must be an object.")
+    units = response.get("units_demo")
+    roles = response.get("roles_demo")
+    if isinstance(units, bool) or not isinstance(units, int) or units < 0:
+        raise ValueError("Decoded packet response units_demo must be a non-negative integer.")
+    if not isinstance(roles, list) or any(not isinstance(role, str) or not role.strip() for role in roles):
+        raise ValueError("Decoded packet response roles_demo must be a list of non-empty strings.")
+    if not isinstance(packet.get("data"), dict):
+        raise ValueError("Decoded packet data must be an object.")
+
+    def strict_json(value: Any) -> bool:
+        if value is None or isinstance(value, (str, bool)):
+            return True
+        if isinstance(value, int) and not isinstance(value, bool):
+            return True
+        if isinstance(value, float):
+            return math.isfinite(value)
+        if isinstance(value, list):
+            return all(strict_json(item) for item in value)
+        if isinstance(value, dict):
+            return all(isinstance(key, str) and strict_json(item) for key, item in value.items())
+        return False
+
+    if not strict_json(packet["data"]):
+        raise ValueError("Decoded packet data must contain strict JSON-compatible values.")
+    try:
+        encoded = json.dumps(packet, separators=(",", ":"), allow_nan=False)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("Decoded packet must be strict JSON.") from exc
+    if len(encoded.encode("utf-8")) > 65536:
+        raise ValueError("Decoded packet exceeds the 64 KiB payload limit.")
     return packet
 
 
