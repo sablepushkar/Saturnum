@@ -31,9 +31,11 @@ def main() -> int:
     vireon = sub.add_parser("vireon", help="run VIREON's CLI")
     vireon.add_argument("args", nargs=argparse.REMAINDER)
     sub.add_parser("vireon-api", help="start VIREON's local FastAPI development server")
-    args = parser.parse_args()
+    args, passthrough = parser.parse_known_args()
 
     if args.component == "check":
+        if passthrough:
+            parser.error(f"unexpected arguments for check: {' '.join(passthrough)}")
         commands = [
             ([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"], ACOUSTIC, None),
             ([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"], VIREON, _vireon_env()),
@@ -48,11 +50,11 @@ def main() -> int:
         return 0
 
     if args.component == "acoustic":
-        return _run([sys.executable, str(ACOUSTIC / "acoustic_bbox.py"), *args.args], cwd=ACOUSTIC)
+        return _run([sys.executable, str(ACOUSTIC / "acoustic_bbox.py"), *args.args, *passthrough], cwd=ACOUSTIC)
 
     if args.component == "vireon":
         env = _vireon_env()
-        return _run([sys.executable, "-c", "from vireon.cli import main; main()", *args.args], cwd=VIREON, env=env)
+        return _run([sys.executable, "-c", "from vireon.cli import main; main()", *args.args, *passthrough], cwd=VIREON, env=env)
 
     if args.component == "vireon-api":
         env = _vireon_env()
