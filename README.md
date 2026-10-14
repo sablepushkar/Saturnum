@@ -51,3 +51,7 @@ To start the local VIREON API, run python saturnum.py vireon-api and open http:/
 The examples use synthetic data and local storage. I have not verified a real acoustic round trip between devices as part of this combined repository. The components remain separate, and passing tests do not make either project a clinically validated or production-ready system. Do not use real patient data or rely on these projects for emergency communication.
 
 See docs/reliability.md and the component READMEs for details.
+
+## Running the workspace
+
+I keep the main commands and what they check in [the project runbook](docs/project-runbook.md).
