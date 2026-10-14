@@ -24,7 +24,13 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e './components/vireon[test]'
       - name: Compile project modules
-        run: python -m compileall -q saturnum.py components/acoustic_bbox components/vireon/src components/vireon/tests components/acoustic_bbox/tests
+        run: python -m compileall -q saturnum.py tests components/acoustic_bbox components/vireon/src components/vireon/tests components/acoustic_bbox/tests
+      - name: Run Saturnum-level status/report tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify machine-readable preflight report
+        run: |
+          python saturnum.py status --json > "$RUNNER_TEMP/saturnum-status.json"
+          python -c "import json,sys; report=json.load(open(sys.argv[1], encoding='utf-8')); assert report['overall_status']=='pass', report" "$RUNNER_TEMP/saturnum-status.json"
       - name: Run combined component tests
         run: python saturnum.py check
       - name: Run Acoustic-B-Box self-test
