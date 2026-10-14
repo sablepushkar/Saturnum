@@ -1,75 +1,51 @@
-# Project VIREON Advanced
+# Project VIREON
 
-**Pharmaceutical Lifecycle Intelligence Engine**
+VIREON is a student project I use to explore how pharmaceutical-style event data can be checked with simple rules and then traced through a local workflow. The examples are synthetic. I built it to practise Python, data validation, APIs, persistence and repeatable testing—not to make claims about a real pharmaceutical system.
 
-Project VIREON Advanced is my student-built research and engineering prototype for connecting pharmaceutical event data, deterministic review signals, evidence provenance, audit records, and synthetic lifecycle workflows. The core question is practical: can someone reproduce a signal and trace it back to the input that triggered it?
+## What is in the project
 
-## What currently works
+- Validated event objects and deterministic threshold rules.
+- Local SQLite storage for the prototype.
+- Evidence references and audit-style records.
+- A small registry for data, models and detector versions.
+- Synthetic lifecycle scenarios.
+- Command-line commands, a FastAPI API and a basic browser dashboard.
+- Tests for validation and repeatable signal evaluation.
 
-- Validated pharmaceutical event objects and deterministic threshold rules.
-- SQLite persistence for the local prototype.
-- Evidence references/graph and audit records.
-- Data/model registry and evidence manifests.
-- Distribution checks, digital-measure validation, and trial-site integrity indicators.
-- Synthetic lifecycle scenarios, CLI, FastAPI endpoints, and a small browser dashboard.
-- Regression tests for invalid numeric values and thresholds.
-- Optional timezone-aware evaluation timestamps so a fixed input/rule/time combination produces repeatable Signal objects.
+## How it works
 
-## Main flow
-
-```text
+~~~text
 Synthetic event
       ↓
-Domain validation
+Input validation
       ↓
-Versioned threshold rules
+Configured rules
       ↓
-Signal + source event reference
+Signal with a reference to its source event
       ↓
-Persistence / audit / evidence manifest
-      ↓
-Human review in API or dashboard
-```
+Local storage, evidence references and review
+~~~
 
-The components are deterministic at this stage. The system does not need an opaque model call to explain why a rule fired.
+A rule-based signal can be explained by looking at the input and the configured threshold. The project does not need a model to make those rule decisions.
 
-## Quick start
+## Run it locally
 
-Requires Python 3.11+.
+Python 3.11 or newer is recommended.
 
-```bash
+~~~bash
 python -m pip install -e ".[test]"
 python -m unittest discover -s tests -v
 vireon simulate --scenario biomarker-signal
 vireon registry list
 uvicorn vireon.api:app --reload
-```
+~~~
 
-Then open `http://127.0.0.1:8000/docs` or the local `/dashboard` route. See `docs/demo.md` for the current workflow and `docs/replay.md` for repeatable rule evaluation.
+Then open http://127.0.0.1:8000/docs or the local /dashboard route. See docs/demo.md for a short walkthrough.
 
-## What the Advanced update adds
+For repeatable signal evaluation, I can pass an explicit timezone-aware evaluated_at timestamp. The same event, rules and timestamp should produce repeatable results.
 
-A signal's detection time normally reflects the current invocation. For repeatable tests and comparisons, callers can now supply an explicit timezone-aware `evaluated_at` timestamp. This avoids timestamp differences making otherwise identical results appear different during replay. Naive timestamps are rejected rather than interpreted using the machine's local timezone.
+## Current limits
 
-Example:
+VIREON uses synthetic data and local prototype infrastructure. It does not diagnose, recommend treatment, make clinical decisions, predict regulatory approval or establish regulatory compliance. A trial-integrity or monitoring flag is only a software-generated signal; it is not proof of misconduct. Do not use real patient data.
 
-```python
-from datetime import datetime, timezone
-from vireon.signal_engine import detect_signals
-
-signals = detect_signals(events, evaluated_at=datetime(2026, 10, 10, tzinfo=timezone.utc))
-```
-
-## Boundaries
-
-VIREON uses synthetic data and local prototype infrastructure. It does not diagnose, recommend treatment, make autonomous clinical decisions, predict regulatory approval, or claim regulatory compliance. Trial-integrity and monitoring outputs are software review flags, not proof of misconduct or clinical validity. Do not use real patient data.
-
-## Practical next steps
-
-1. Keep API validation and error behavior covered by regression tests.
-2. Add stable machine-readable evaluation fixtures for every signal type.
-3. Record rule versions and evidence references consistently through historical replay.
-4. Keep interoperability mappings explicit about unmapped fields and terminology gaps.
-5. Add deployment and observability only after the local workflow is reliable.
-
-See `DEVELOPERS_NOTES.md` for the implementation notes and checks.
+I am keeping the project small and testing its current behaviour before adding more services or machine-learning features. The source code and tests are the best place to check exactly what is implemented.

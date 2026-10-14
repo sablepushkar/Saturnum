@@ -1,25 +1,21 @@
-# Project VIREON Advanced — Developer Notes
+# VIREON — development notes
 
-## Advanced update — reproducible signal evaluation
+## Making signal evaluation repeatable
 
-The previous signal engine validated thresholds and handled extreme numeric inputs, but the timestamp was always generated inside the detector. That made two otherwise identical calls produce different full Signal objects.
+Previously, the signal detector generated its timestamp during each call. That meant two runs with the same synthetic event could still produce different full Signal objects.
 
-### What changed
+I added an optional evaluated_at argument to detect_signals. If I do not provide one, it still uses the current UTC time. If I do provide one, it must include a timezone. This avoids silently treating a local, timezone-free timestamp as UTC.
 
-- Added an optional `evaluated_at` argument to `detect_signals`.
-- Kept the current UTC timestamp as the default for normal use.
-- Require an explicit timestamp to be timezone-aware.
-- Added tests that run the same synthetic event twice at the same timestamp and compare the resulting Signal objects.
-- Kept the existing rule logic and default thresholds intact.
+I added tests that run the same event with the same explicit time and compare the resulting signals. The existing rule logic and default thresholds were left unchanged.
 
-### Check it
+## Check it
 
-```bash
+~~~bash
 python -m unittest discover -s tests -v
-```
+~~~
 
-For a reproducible run, pass the same event data, thresholds, detector version, and timezone-aware `evaluated_at` value. This improves replayability; it is not a claim that the overall system is validated or production-ready.
+For a repeatable run, the event data, thresholds, detector version and timestamp need to be the same. This makes the software easier to test; it does not validate the whole project for real pharmaceutical use.
 
-### Next practical work
+## Next thing to improve
 
-The next worthwhile milestone is a versioned scenario fixture with expected signals and evidence references. That should come before adding machine learning or expanding the number of dashboard indicators.
+I want to add a small set of versioned scenarios with expected signals and evidence references, then test them. That seems more useful than adding more dashboard indicators before I know the current ones behave consistently.

@@ -1,17 +1,17 @@
-# Saturnum reliability and observability notes
+# Checks I run in Saturnum
 
-Saturnum keeps Acoustic-B-Box and VIREON as separate components. The shared command entry point is an operator convenience, not a shared end-to-end data pipeline.
+Saturnum is a shared workspace and command entry point. It does not combine Acoustic-B-Box and VIREON into one end-to-end service.
 
-## Local preflight report
+## Quick status check
 
 ~~~bash
 python saturnum.py status
 python saturnum.py status --json
 ~~~
 
-The report records the Python version, checks that the expected source and test locations exist, and checks that FastAPI and Uvicorn are discoverable for VIREON's API entry point. The JSON shape is versioned with the report_schema_version field. Optional GGWave and sounddevice dependency presence is reported separately and does not imply successful audio transmission.
+This checks whether the expected source and test paths exist and whether FastAPI and Uvicorn can be found in the current Python environment. It also reports whether optional audio packages are installed. That does not prove audio transmission works.
 
-## Automated checks
+## Run the tests
 
 ~~~bash
 python saturnum.py check
@@ -20,12 +20,14 @@ python saturnum.py vireon simulate --scenario biomarker-signal
 python saturnum.py vireon registry list
 ~~~
 
-GitHub Actions runs compilation, Saturnum-level status/report tests, both component test suites, the Acoustic-B-Box hardware-free self-test, and VIREON CLI smoke checks. A passing workflow demonstrates only that these automated checks passed for that commit and environment.
+GitHub Actions compiles the code, runs the status-report tests, checks the JSON report, runs both component test suites, runs the Acoustic-B-Box software self-test and runs a couple of VIREON CLI commands.
 
-## Known boundaries
+A green workflow means those checks passed in that CI environment for that commit. It does not mean every possible input or real device setup has been tested.
 
-- The status report is a preflight, not a health check of a running service and not a test runner.
-- Component tests use synthetic/local examples; they do not validate a real pharmaceutical workflow.
-- The Acoustic-B-Box physical audio round trip remains unverified in this repository integration. Hardware, room, device, and sample-rate conditions need a separately recorded experiment.
-- VIREON and Acoustic-B-Box remain separate components; no production-grade cross-component event pipeline is claimed.
-- No patient data, clinical validation, sender authentication, or deployment-grade security is implied by these checks.
+## Gaps I know about
+
+- The status report is not a running-service health check.
+- The components use synthetic or local examples.
+- Real acoustic transmission between physical devices has not been verified here.
+- There is no shared production event pipeline between the components.
+- These checks do not establish clinical validity, deployment security or sender authentication.
