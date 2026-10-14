@@ -50,3 +50,7 @@ The status command checks expected source/test locations and whether key depende
 ## Limits
 
 The examples use synthetic data and local storage. Real acoustic delivery between physical devices has not been established by the combined repository checks. The components remain separate, and passing tests do not make either project clinically validated or production-ready. Do not use real patient data or rely on these projects for emergency communication.
+
+---
+
+Copyright © 2026 Pushkar Sudam Sable. See [COPYRIGHT.md](COPYRIGHT.md) for ownership and license notes.
